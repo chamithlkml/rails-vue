@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - 3000:3000
+    networks:
+      - rails-vue-net
+    volumes:
+            - '.:/app'
+    depends_on:
+        - pgsql
+  pgsql:
+    container_name: pgsql
+    image: postgres:14.3-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: whatever
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    networks:
+      - rails-vue-net
+networks:
+    rails-vue-net:
+        driver: bridge
